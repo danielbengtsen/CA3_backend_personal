@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.com/danielbengtsen/CA3_backend_personal.svg?branch=master)](https://travis-ci.com/danielbengtsen/CA3_backend_personal)
+
 # CA3 Backend Project
 
 ## How to use:
