@@ -19,7 +19,8 @@ public class HttpUtils {
         con.setRequestProperty("Content-Type", "application/json");
         
         if (url.toString().contains("api.digitalocean")) {
-            con.setRequestProperty("Authorization","Bearer "+ Keys.digitalOceanBearer);
+            //con.setRequestProperty("Authorization","Bearer "+ Keys.digitalOceanBearer);
+            con.setRequestProperty("Authorization","Bearer "+ "DigitaloceanKeyShouldGoHere");
         }
         
         Scanner scan = new Scanner(con.getInputStream(), "UTF-8");

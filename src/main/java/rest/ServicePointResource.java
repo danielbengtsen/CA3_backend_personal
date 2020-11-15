@@ -39,6 +39,10 @@ public class ServicePointResource {
     private static final String weatherURL = "https://api.weatherbit.io/v2.0/current";
     private static final ExecutorService es = Executors.newCachedThreadPool();
     private static Helper helper = new Helper();
+    // These keys should be in the git-ignored Keys.java, but then Travis can't deploy shit.
+    public static String weatherKey = "cdf47dcc554d4589880067a2ea47c310";
+    public static String postNordKey = "5d4a85e4661bc2c34e380d9ba5500b0c";
+
     
     @GET
     @Produces({MediaType.APPLICATION_JSON})
@@ -64,7 +68,11 @@ public class ServicePointResource {
         Callable<PostnordResponseDTO> postnordTask = new Callable<PostnordResponseDTO>() {
             @Override
             public PostnordResponseDTO call() throws IOException {
+                /*
                 String fullURL = (postnordURL + "findNearestByAddress.json?apikey=" + Keys.postNordKey + "&countryCode=DK&agreementCountry=DK&city=" + helper.fixInput(city)
+                + "&postalCode=" + helper.fixInput(postalCode) + "&streetName=" + helper.fixInput(streetName) + "&streetNumber=" + helper.fixInput(streetNumber));
+                */
+                String fullURL = (postnordURL + "findNearestByAddress.json?apikey=" + postNordKey + "&countryCode=DK&agreementCountry=DK&city=" + helper.fixInput(city)
                 + "&postalCode=" + helper.fixInput(postalCode) + "&streetName=" + helper.fixInput(streetName) + "&streetNumber=" + helper.fixInput(streetNumber));
                 String postnord = HttpUtils.fetchData(fullURL);
                 PostnordResponseDTO postnordDTO = gson.fromJson(postnord, PostnordResponseDTO.class);
@@ -74,7 +82,8 @@ public class ServicePointResource {
         Callable<WeatherResponseDTO> weatherTask = new Callable<WeatherResponseDTO>() {
             @Override
             public WeatherResponseDTO call() throws IOException {
-                String weather = HttpUtils.fetchData(weatherURL + "?key=" + Keys.weatherKey + "&lang=da&postal_code=" + postalCode + "&country=DK");
+                // String weather = HttpUtils.fetchData(weatherURL + "?key=" + Keys.weatherKey + "&lang=da&postal_code=" + postalCode + "&country=DK");
+                String weather = HttpUtils.fetchData(weatherURL + "?key=" + weatherKey + "&lang=da&postal_code=" + postalCode + "&country=DK");
                 WeatherResponseDTO weatherDTO = gson.fromJson(weather, WeatherResponseDTO.class);
                 return weatherDTO;
             }

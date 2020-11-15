@@ -32,6 +32,8 @@ public class MovieResource {
     private static final String movieURL = "https://api.nytimes.com/svc/movies/v2/reviews/search.json";
     private static final ExecutorService es = Executors.newCachedThreadPool();
     private static Helper helper = new Helper();
+    // This key should be in the git-ignored Keys.java, but then Travis can't deploy shit.
+    public static String movieKey = "liNcU16apDyGHV0yurSqPUMuAzQnyj98";
     
     @GET
     @Produces({MediaType.APPLICATION_JSON})
@@ -46,7 +48,8 @@ public class MovieResource {
     @RolesAllowed({"user"})
     public String getMovieReview(String movieJSON) throws IOException {
         MovieRequestDTO temp = gson.fromJson(movieJSON, MovieRequestDTO.class);
-        String movie = HttpUtils.fetchData(movieURL + "?query=" + helper.fixInput(temp.getQuery()) + "&api-key=" + Keys.movieKey);
+        //String movie = HttpUtils.fetchData(movieURL + "?query=" + helper.fixInput(temp.getQuery()) + "&api-key=" + Keys.movieKey);
+        String movie = HttpUtils.fetchData(movieURL + "?query=" + helper.fixInput(temp.getQuery()) + "&api-key=" + movieKey);
         MovieResponseDTO movieDTO = gson.fromJson(movie, MovieResponseDTO.class);
         return gson.toJson(movieDTO);
     }
