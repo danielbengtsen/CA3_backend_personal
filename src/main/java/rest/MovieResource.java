@@ -33,7 +33,7 @@ public class MovieResource {
     private static final ExecutorService es = Executors.newCachedThreadPool();
     private static Helper helper = new Helper();
     // This key should be in the git-ignored Keys.java, but then Travis can't deploy shit.
-    public static String movieKey = "liNcU16apDyGHV0yurSqPUMuAzQnyj98";
+    public static final String movieKey = "liNcU16apDyGHV0yurSqPUMuAzQnyj98";
     
     @GET
     @Produces({MediaType.APPLICATION_JSON})

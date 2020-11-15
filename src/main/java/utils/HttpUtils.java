@@ -21,6 +21,10 @@ public class HttpUtils {
         if (url.toString().contains("api.digitalocean")) {
             //con.setRequestProperty("Authorization","Bearer "+ Keys.digitalOceanBearer);
             con.setRequestProperty("Authorization","Bearer "+ "DigitaloceanKeyShouldGoHere");
+        } else if(url.toString().contains("football-prediction-api"))
+        {
+            //con.setRequestProperty("X-RapidAPI-Key", Keys.sportKey);
+            con.setRequestProperty("X-RapidAPI-Key", "445fed1118msheab4c85591006e4p1bbbffjsn2c51a50c033c");
         }
         
         Scanner scan = new Scanner(con.getInputStream(), "UTF-8");

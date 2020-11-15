@@ -15,10 +15,6 @@ import javax.persistence.JoinColumn;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
-/**
- *
- * @author Danie
- */
 @Entity
 public class Phone implements Serializable {
 
@@ -26,7 +22,7 @@ public class Phone implements Serializable {
     @Id
     @Column(name = "phone_number", length = 20)
     private String phoneNumber;
-    @OneToOne
+    @OneToOne(mappedBy = "phone")
     private User user;
 
     public Phone() {

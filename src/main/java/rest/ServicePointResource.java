@@ -5,6 +5,7 @@ import com.google.gson.GsonBuilder;
 import dto.AddressRequestDTO;
 import dto.PostnordResponseDTO;
 import dto.ServicepointsResponseDTO;
+import dto.SportResponseDTO;
 import dto.WeatherResponseDTO;
 import utils.EMF_Creator;
 import facades.FacadeExample;
@@ -37,11 +38,12 @@ public class ServicePointResource {
     private static final Gson gson = new GsonBuilder().setPrettyPrinting().create();
     private static final String postnordURL = "https://api2.postnord.com/rest/businesslocation/v1/servicepoint/";
     private static final String weatherURL = "https://api.weatherbit.io/v2.0/current";
+    private static final String sportURL = "https://football-prediction-api.p.rapidapi.com/api/v2/predictions";
     private static final ExecutorService es = Executors.newCachedThreadPool();
     private static Helper helper = new Helper();
     // These keys should be in the git-ignored Keys.java, but then Travis can't deploy shit.
-    public static String weatherKey = "cdf47dcc554d4589880067a2ea47c310";
-    public static String postNordKey = "5d4a85e4661bc2c34e380d9ba5500b0c";
+    private static final String weatherKey = "cdf47dcc554d4589880067a2ea47c310";
+    private static final String postNordKey = "5d4a85e4661bc2c34e380d9ba5500b0c";
 
     
     @GET
@@ -88,14 +90,25 @@ public class ServicePointResource {
                 return weatherDTO;
             }
         };
+        Callable<SportResponseDTO> sportTask = new Callable<SportResponseDTO>() {
+            @Override
+            public SportResponseDTO call() throws IOException {
+                // String weather = HttpUtils.fetchData(weatherURL + "?key=" + Keys.weatherKey + "&lang=da&postal_code=" + postalCode + "&country=DK");
+                String sport = HttpUtils.fetchData(sportURL);
+                SportResponseDTO sportDTO = gson.fromJson(sport, SportResponseDTO.class);
+                return sportDTO;
+            }
+        };
         
         Future<PostnordResponseDTO> futurePostnord = threadPool.submit(postnordTask);
         Future<WeatherResponseDTO> futureWeather = threadPool.submit(weatherTask);
+        Future<SportResponseDTO> futureSport = threadPool.submit(sportTask);
         
         PostnordResponseDTO postnord = futurePostnord.get(3, TimeUnit.SECONDS);
         WeatherResponseDTO weather = futureWeather.get(3, TimeUnit.SECONDS);
+        SportResponseDTO sport = futureSport.get(3, TimeUnit.SECONDS);
         
-        ServicepointsResponseDTO combinedDTO = new ServicepointsResponseDTO(postnord, weather);
+        ServicepointsResponseDTO combinedDTO = new ServicepointsResponseDTO(postnord, weather, sport);
         String combinedJSON = gson.toJson(combinedDTO);
         
         return combinedJSON;
